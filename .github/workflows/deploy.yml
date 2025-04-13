@@ -40,4 +40,5 @@ jobs:
           docker pull ${{ secrets.DOCKER_USERNAME }}/backend
           cd ~/DevStack-Lite/docker-devops-app
           docker-compose down
+          docker-compose pull
           docker-compose up -d
