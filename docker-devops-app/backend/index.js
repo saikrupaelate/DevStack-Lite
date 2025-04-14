@@ -1,6 +1,18 @@
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
+const client = require('prom-client');
+const collectDefaultMetrics = client.collectDefaultMetrics;
+
+// Enable collection of default metrics
+collectDefaultMetrics();
+
+// Expose /metrics endpoint
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', client.register.contentType);
+  res.end(await client.register.metrics());
+});
+
 
 const app = express();
 app.use(cors());
