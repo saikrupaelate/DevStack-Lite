@@ -29,15 +29,15 @@ jobs:
         docker build -t ${{ secrets.DOCKER_USERNAME }}/frontend ./frontend
         docker push ${{ secrets.DOCKER_USERNAME }}/frontend
 
-    - name: Deploy on EC2 via SSH
+    - name: Deploy to EC2
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_KEY }}
         script: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/frontend
           docker pull ${{ secrets.DOCKER_USERNAME }}/backend
+          docker pull ${{ secrets.DOCKER_USERNAME }}/frontend
           cd ~/DevStack-Lite/docker-devops-app
           docker-compose down
           docker-compose pull
