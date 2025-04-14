@@ -21,12 +21,12 @@ jobs:
 
       - name: Build & Push backend image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/backend:latest ./backend
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/backend:latest ./DevStack-Lite/docker-devops-app/backend
           docker push ${{ secrets.DOCKER_USERNAME }}/backend:latest
 
       - name: Build & Push frontend image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/frontend:latest ./frontend
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/frontend:latest ./DevStack-Lite/docker-devops-app/frontend
           docker push ${{ secrets.DOCKER_USERNAME }}/frontend:latest
 
       - name: Deploy to EC2
