@@ -37,16 +37,14 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         script: |
           echo "Stopping existing containers..."
-          docker-compose -f ~/DevStack-Lite/docker-devops-app/docker-compose.yml down
+          docker-compose -f ~/DevStack-Lite/docker-devops-app/docker-compose.yml down || true
 
-          echo "Pruning old Docker images..."
-          docker image prune -a -f
+          echo "Pruning old Docker images and volumes..."
+          docker image prune -a -f || true
+          docker volume prune -f || true
 
-          echo "Pruning unused volumes..."
-          docker volume prune -f
-
-          echo "Removing old code directory..."
-          rm -rf ~/DevStack-Lite/docker-devops-app
+          echo "Removing old code..."
+          rm -rf ~/DevStack-Lite || true
 
           echo "Pulling updated images from DockerHub..."
           docker pull ${{ secrets.DOCKER_USERNAME }}/backend
