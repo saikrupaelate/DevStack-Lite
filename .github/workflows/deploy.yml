@@ -36,8 +36,21 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
-            docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+            echo "🧹 Cleaning up unused Docker resources..."
+            docker container prune -f
+            docker image prune -af
+            docker volume prune -f
+            docker builder prune -af
+
+            echo "🗑️ Removing any leftover backend/frontend images..."
+            docker rmi -f ${{ secrets.DOCKER_USERNAME }}/backend || true
+            docker rmi -f ${{ secrets.DOCKER_USERNAME }}/frontend || true
+
+            echo "⬇️ Pulling updated images from Docker Hub..."
+            docker pull ${{ secrets.DOCKER_USERNAME }}/backend
+            docker pull ${{ secrets.DOCKER_USERNAME }}/frontend
+
+            echo "🚀 Restarting app using docker-compose..."
             cd ~/DevStack-Lite/docker-devops-app
             docker-compose down
             docker-compose pull
